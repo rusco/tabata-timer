@@ -1,10 +1,9 @@
 <!doctype html>
 <html>
+    <head>
         <meta charset="utf-8"/>
         <title>Tabata Timer</title>
-        <!--[if lt IE 9]>
-        <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-        <![endif]-->
+        <script src="lib/jquery-2.1.0.min.js"></script>
         <style>
             body {
                 font-family: sans-serif;;
@@ -18,29 +17,37 @@
                 width: 6em;
                 display: inline-block;
             }
-            .on { color: green; }
-            .off { color: red; }
-	    div { margin: 0.3em 0; }
-	    input { font-size: .8em; }  
-            </style>
+            .on { 
+                color: #FFA100; 
+            }
+            .off { 
+                color: #0F4DA8; 
+            }
+             div { 
+                margin: 0.3em 0; 
+            }
+            input { 
+                font-size: .8em; 
+            }  
+        </style>
     </head>
     <body>
         <time>00:00</time>
         <form>
             <div>
                 <label>Rounds</label>
-                <input type="number" name="rounds" min="0" placeholder="Number of rounds">
+                <input id="rounds" type="number" name="rounds" min="0" value="8" placeholder="Number of rounds">
             </div>
             <div>
                 <label class="on">On (sec)</label>
-                <input type="number" name="on" min="0" step="5" placeholder="Excercise time">
+                <input id="on" type="number" name="on" min="0" step="1" value="20" placeholder="Excercise time">
             </div>
             <div>
                 <label class="off">Off (sec)</label>
-                <input type="number" name="off" min="0" step="5" placeholder="Break time">
+                <input id="off" type="number" name="off" min="0" step="1" value="10" placeholder="Break time">
             </div>
-            <button>Go</button>
+            <button>Press Space or Enter</button>
         <form>
-        <script src="lib/app.js"></script>
+        <script src="src/app.js"></script>
     </body>
 </html>

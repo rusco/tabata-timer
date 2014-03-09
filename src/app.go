@@ -2,13 +2,13 @@ package main
 
 import (
 	"github.com/gopherjs/gopherjs/js"
-	jQueryStatic "github.com/rusco/jquery"
+	"github.com/rusco/jquery"
 	"math"
 	"strconv"
 )
 
 var (
-	jQuery = jQueryStatic.NewJQuery
+	jQuery = jquery.NewJQuery
 )
 
 const (
@@ -22,16 +22,16 @@ func main() {
 
 	timer := NewTabataTimer()
 
-	jQuery("button").On("click", func(e jQueryStatic.Event) {
+	jQuery("button").On("click", func(e jquery.Event) {
 		timer.start()
 		e.PreventDefault()
 	})
 }
 
 type TabataTimer struct {
-	element       jQueryStatic.JQuery
-	onSec         jQueryStatic.JQuery
-	offSec        jQueryStatic.JQuery
+	element       jquery.JQuery
+	onSec         jquery.JQuery
+	offSec        jquery.JQuery
 	endDate       float64
 	interval      int
 	rounds        int
@@ -67,7 +67,7 @@ func (t *TabataTimer) start() {
 
 func (t *TabataTimer) tick() {
 
-	timeDelta := t.endDate - jQueryStatic.Now() + 1000.0
+	timeDelta := t.endDate - jquery.Now() + 1000.0
 
 	if timeDelta > 0 {
 		formattedTime := t.convertToTime(timeDelta)
@@ -118,7 +118,7 @@ func (t *TabataTimer) breakTimer() {
 	if err != nil {
 		return
 	}
-	t.endDate = jQueryStatic.Now() + float64(offsec)*1000
+	t.endDate = jquery.Now() + float64(offsec)*1000
 	t.roundFinished = true
 	t.element.SetCss("color", ON)
 
@@ -129,7 +129,7 @@ func (t *TabataTimer) restart() {
 	if err != nil {
 		return
 	}
-	t.endDate = jQueryStatic.Now() + float64(onSec)*1000
+	t.endDate = jquery.Now() + float64(onSec)*1000
 
 	t.roundFinished = false
 	t.element.SetCss("color", OFF)

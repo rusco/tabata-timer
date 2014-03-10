@@ -12,25 +12,42 @@ var (
 )
 
 const (
-	ORANGE = "#FFA100"
-	BLUE   = "#0F4DA8"
-	ON     = ORANGE
-	OFF    = BLUE
-
+	ORANGE     = "#f57b00"
+	BLUE       = "#1f8dd6"
+	ON         = ORANGE
+	OFF        = BLUE
 	ESCAPE_KEY = 27
+	SPACE_KEY  = 32
+	CR_KEY     = 13
 )
+
+type time struct {
+	minutes string
+	seconds string
+}
+
+type TabataTimer struct {
+	time          jquery.JQuery
+	onSec         jquery.JQuery
+	offSec        jquery.JQuery
+	roundno       jquery.JQuery
+	splash        jquery.JQuery
+	endDate       float64
+	interval      int
+	rounds        int
+	roundFinished bool
+}
 
 func main() {
 
 	timer := NewTabataTimer()
-	print("start")
 
 	jQuery("body").On(jquery.KEYDOWN, func(e jquery.Event) {
 		switch e.KeyCode {
 		case ESCAPE_KEY:
-			print(" escape key pressed")
-		default:
-			print(" any other key pressed")
+			timer.init()
+		case SPACE_KEY, CR_KEY:
+			timer.start()
 		}
 	})
 
@@ -40,28 +57,20 @@ func main() {
 	})
 }
 
-type TabataTimer struct {
-	element       jquery.JQuery
-	onSec         jquery.JQuery
-	offSec        jquery.JQuery
-	endDate       float64
-	interval      int
-	rounds        int
-	roundFinished bool
-}
-
 func NewTabataTimer() *TabataTimer {
 
-	element := jQuery("time")
+	time := jQuery("time")
 	onSec := jQuery("#on")
 	offSec := jQuery("#off")
+	roundNo := jQuery("#roundno")
+	splash := jQuery(".splash-container")
 
 	endDate := 0.0
 	interval := 0
-	rounds := 1
+	rounds := 0
 	roundFinished := false
 
-	return &TabataTimer{element, onSec, offSec, endDate, interval, rounds, roundFinished}
+	return &TabataTimer{time, onSec, offSec, roundNo, splash, endDate, interval, rounds, roundFinished}
 }
 
 func (t *TabataTimer) start() {
@@ -71,35 +80,34 @@ func (t *TabataTimer) start() {
 	if err != nil {
 		return
 	}
+	t.roundno.SetText(t.pad(t.rounds))
 	t.restart()
-
 	t.interval = js.Global.Call("setInterval", t.tick, 100).Int()
-
 }
 
 func (t *TabataTimer) tick() {
 
 	timeDelta := t.endDate - jquery.Now() + 1000.0
+	if !t.roundFinished {
+		t.roundno.SetText(t.pad(t.rounds))
+	}
 
 	if timeDelta > 0 {
 		formattedTime := t.convertToTime(timeDelta)
-		t.element.SetHtml(formattedTime.minutes + ":" + formattedTime.seconds)
+		t.time.SetHtml(formattedTime.minutes + ":" + formattedTime.seconds)
 	} else {
 		if t.rounds > 0 {
 			if t.roundFinished {
-				jQuery("#rounds").SetVal(t.rounds)
 				t.restart()
 			} else {
 				t.breakTimer()
 				t.rounds -= 1
 			}
-		} else {
-			t.playSound()
+		} else { //finish
+			t.roundno.SetText(t.pad(t.rounds))
 			js.Global.Call("clearTimeout", t.interval)
-
 		}
 	}
-
 }
 
 func (t *TabataTimer) pad(n int) string {
@@ -109,11 +117,6 @@ func (t *TabataTimer) pad(n int) string {
 	return "0" + strconv.Itoa(n)
 }
 
-type time struct {
-	minutes string
-	seconds string
-}
-
 func (t *TabataTimer) convertToTime(milliseconds float64) time {
 
 	tmsec := math.Floor(milliseconds / 1000)
@@ -121,34 +124,35 @@ func (t *TabataTimer) convertToTime(milliseconds float64) time {
 	seconds := tmsec - (minutes * 60)
 
 	return time{t.pad(int(minutes)), t.pad(int(seconds))}
-
 }
 
 func (t *TabataTimer) breakTimer() {
-	offsec, err := strconv.Atoi(t.offSec.Val())
+	offSeconds, err := strconv.Atoi(t.offSec.Val())
 	if err != nil {
 		return
 	}
-	t.endDate = jquery.Now() + float64(offsec)*1000
+	t.endDate = jquery.Now() + float64(offSeconds)*1000
 	t.roundFinished = true
-	t.element.SetCss("color", ON)
 
+	t.splash.SetCss("background-color", OFF)
 }
 
 func (t *TabataTimer) restart() {
-	onSec, err := strconv.Atoi(t.onSec.Val())
+	onSeconds, err := strconv.Atoi(t.onSec.Val())
 	if err != nil {
 		return
 	}
-	t.endDate = jquery.Now() + float64(onSec)*1000
-
+	t.endDate = jquery.Now() + float64(onSeconds)*1000
 	t.roundFinished = false
-	t.element.SetCss("color", OFF)
 
+	t.splash.SetCss("background-color", ON)
 }
 
-func (t *TabataTimer) playSound() {
-	print("play sound")
-	//js.Global.Call("alert", "End!")
+func (t *TabataTimer) init() {
 
+	js.Global.Call("clearTimeout", t.interval)
+
+	t.roundno.SetText("00")
+	t.time.SetHtml("00:00")
+	t.splash.SetCss("background-color", OFF)
 }

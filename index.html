@@ -1,53 +1,50 @@
 <!doctype html>
-<html>
-    <head>
-        <meta charset="utf-8"/>
-        <title>Tabata Timer</title>
-        <script src="lib/jquery-2.1.0.min.js"></script>
-        <style>
-            body {
-                font-family: sans-serif;;
-                color: #444;
-                font-size: 2em;
-            }
-            time {
-                font-size: 3em;
-            }
-            label {
-                width: 6em;
-                display: inline-block;
-            }
-            .on { 
-                color: #FFA100; 
-            }
-            .off { 
-                color: #0F4DA8; 
-            }
-             div { 
-                margin: 0.3em 0; 
-            }
-            input { 
-                font-size: .8em; 
-            }  
-        </style>
-    </head>
-    <body>
-        <time>00:00</time>
-        <form>
-            <div>
-                <label>Rounds</label>
-                <input id="rounds" type="number" name="rounds" min="0" value="8" placeholder="Number of rounds">
-            </div>
-            <div>
-                <label class="on">On (sec)</label>
-                <input id="on" type="number" name="on" min="0" step="1" value="20" placeholder="Excercise time">
-            </div>
-            <div>
-                <label class="off">Off (sec)</label>
-                <input id="off" type="number" name="off" min="0" step="1" value="10" placeholder="Break time">
-            </div>
-            <button>Press Space or Enter</button>
-        <form>
-        <script src="src/app.js"></script>
-    </body>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Tabata Timer">
+    <title>Tabata Timer </title>
+    <script src="lib/jquery-2.1.0.min.js"></script>
+	<link rel="stylesheet" href="css/pure-min.css">
+    <link rel="stylesheet" href="css/main-grid.css">
+    <link rel="stylesheet" href="css/marketing.css">
+	<link rel="stylesheet" href="css/font-awesome.css">
+</head>
+<body>
+    <div class="header">
+        <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal pure-menu-fixed">
+            <a class="pure-menu-heading" href="">Tabata Timer - Made with GopherJS</a>
+            <ul>
+                <li class="pure-menu-selected">
+    				<label>Rounds: </label>
+    				<input id="rounds" type="number" name="rounds" min="0" value="8" placeholder="Number of rounds">
+    			</li>
+                <li>
+                    <label class="on">Training (sec): </label>
+                    <input id="on" type="number" name="on" min="0" step="1" value="20" placeholder="Excercise time">
+                </li>
+                <li>
+                    <label class="off">Rest (sec): </label>
+                    <input id="off" type="number" name="off" min="0" step="1" value="10" placeholder="Break time">
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="splash-container">
+        <div class="splash">
+            <h1 class="splash-head">
+    			<span id="roundno">00</span>&nbsp;
+                <time>00:00</time>
+    		</h1>
+            <p class="splash-subhead">
+                Space or Return key = Start/Stop, Escape Key = reset
+            </p>
+            <p id="button">
+                <a href="#" class="pure-button pure-button-primary">Get Started</a>
+            </p>
+        </div>
+    </div>
+    <script src="lib/app.js"></script>
+</body>
 </html>

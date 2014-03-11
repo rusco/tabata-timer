@@ -74,6 +74,12 @@ func NewTabataTimer() *TabataTimer {
 }
 
 func (t *TabataTimer) start() {
+	print(t.interval)
+
+	if t.interval != 0 {
+		//is running already, don't start again:
+		return
+	}
 
 	var err error
 	t.rounds, err = strconv.Atoi(jQuery("#rounds").Val())
@@ -105,7 +111,7 @@ func (t *TabataTimer) tick() {
 			}
 		} else { //finish
 			t.roundno.SetText(t.pad(t.rounds))
-			js.Global.Call("clearTimeout", t.interval)
+			t.interval = js.Global.Call("clearTimeout", t.interval).Int()
 		}
 	}
 }
@@ -150,7 +156,7 @@ func (t *TabataTimer) restart() {
 
 func (t *TabataTimer) init() {
 
-	js.Global.Call("clearTimeout", t.interval)
+	t.interval = js.Global.Call("clearTimeout", t.interval).Int()
 
 	t.roundno.SetText("00")
 	t.time.SetHtml("00:00")

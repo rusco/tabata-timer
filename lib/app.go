@@ -74,7 +74,6 @@ func NewTabataTimer() *TabataTimer {
 }
 
 func (t *TabataTimer) start() {
-	print(t.interval)
 
 	if t.interval != 0 {
 		//is running already, don't start again:

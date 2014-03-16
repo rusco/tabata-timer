@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gopherjs/gopherjs/js"
-	"github.com/rusco/jquery"
+	"github.com/gopherjs/jquery"
 	"math"
 	"strconv"
 )
